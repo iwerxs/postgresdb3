@@ -1,0 +1,89 @@
+// func GetReferralRequestsByCompanyIDHandler(w http.ResponseWriter, r *http.Request) {
+// 	sessionID, err := r.Cookie("session_id")
+// 	if err != nil {
+// 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+// 		return
+// 	}
+// 	var user User
+// 	err = db.QueryRow("SELECT u.id, u.email, u.username, u.password, u.role, u.company_id FROM users u "+
+// 		"INNER JOIN sessions s ON u.id = s.user_id "+
+// 		"WHERE s.session_id = $1", sessionID.Value).
+// 		Scan(&user.ID, &user.Email, &user.Username, &user.Password, &user.Role, &user.CompanyID)
+// 	if err != nil {
+// 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+// 		return
+// 	}
+// 	vars := mux.Vars(r)
+// 	companyID, err := strconv.Atoi(vars["companyID"])
+// 	if err != nil {
+// 		http.Error(w, "Invalid company ID", http.StatusBadRequest)
+// 		return
+// 	}
+// 	var referralRequests []ReferralRequest
+// 	rows, err := db.Query("SELECT r.id, r.title, r.content, r.username, r.referrer_user_id, r.company_id, r.referee_client, r.referee_client_email, r.created_at, r.status, c.name AS company_name "+
+// 		"FROM referral_requests r "+
+// 		"LEFT JOIN companies c ON r.company_id = c.id "+
+// 		"WHERE r.company_id = $1 "+
+// 		"ORDER BY r.created_at DESC", companyID)
+// 	if err != nil {
+// 		log.Println("Error fetching referral requests:", err)
+// 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+// 		return
+// 	}
+// 	defer rows.Close()
+// 	for rows.Next() {
+// 		var referralRequest ReferralRequest
+// 		err := rows.Scan(&referralRequest.ID, &referralRequest.Title, &referralRequest.Content, &referralRequest.Username,
+// 			&referralRequest.ReferrerUserID, &referralRequest.CompanyID, &referralRequest.RefereeClient, &referralRequest.RefereeClientEmail,
+// 			&referralRequest.CreatedAt, &referralRequest.Status, &referralRequest.CompanyName)
+// 		if err != nil {
+// 			log.Println("Error scanning referral request row:", err)
+// 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+// 			return
+// 		}
+// 		referralRequests = append(referralRequests, referralRequest)
+// 	}
+// 	if err := rows.Err(); err != nil {
+// 		log.Println("Error iterating over referral request rows:", err)
+// 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+// 		return
+// 	}
+// 	json.NewEncoder(w).Encode(referralRequests)
+// }
+
+// func GetReferralRequestByIDHandler(w http.ResponseWriter, r *http.Request) {
+// 	sessionID, err := r.Cookie("session_id")
+// 	if err != nil {
+// 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+// 		return
+// 	}
+// 	var user User
+// 	err = db.QueryRow("SELECT u.id, u.email, u.username, u.password, u.role, u.company_id FROM users u "+
+// 		"INNER JOIN sessions s ON u.id = s.user_id "+
+// 		"WHERE s.session_id = $1", sessionID.Value).
+// 		Scan(&user.ID, &user.Email, &user.Username, &user.Password, &user.Role, &user.CompanyID)
+// 	if err != nil {
+// 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+// 		return
+// 	}
+// 	vars := mux.Vars(r)
+// 	referralRequestID, err := strconv.Atoi(vars["referralRequestID"])
+// 	if err != nil {
+// 		http.Error(w, "Invalid referral request ID", http.StatusBadRequest)
+// 		return
+// 	}
+// 	var referralRequest ReferralRequest
+// 	err = db.QueryRow("SELECT r.id, r.title, r.content, r.username, r.referrer_user_id, r.company_id, r.referee_client, r.referee_client_email, r.created_at, r.status, c.name AS company_name "+
+// 		"FROM referral_requests r "+
+// 		"LEFT JOIN companies c ON r.company_id = c.id "+
+// 		"WHERE r.id = $1", referralRequestID).
+// 		Scan(&referralRequest.ID, &referralRequest.Title, &referralRequest.Content, &referralRequest.Username,
+// 			&referralRequest.ReferrerUserID, &referralRequest.CompanyID, &referralRequest.RefereeClient, &referralRequest.RefereeClientEmail,
+// 			&referralRequest.CreatedAt, &referralRequest.Status, &referralRequest.CompanyName)
+// 	if err != nil {
+// 		log.Println("Error fetching referral request:", err)
+// 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+// 		return
+// 	}
+// 	json.NewEncoder(w).Encode(referralRequest)
+// }
